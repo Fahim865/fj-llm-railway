@@ -34,7 +34,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 LISTEN_HOST = os.environ.get("PROXY_HOST", "0.0.0.0")
 LISTEN_PORT = int(os.environ.get("PORT", "8080"))
 OLLAMA_URL = "http://127.0.0.1:11434/v1/chat/completions"
-MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:1.5b")
+MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:0.5b")
 MAX_BODY_BYTES = 16 * 1024
 MAX_TEXT_CHARS = 6000
 MAX_TOKENS = 300

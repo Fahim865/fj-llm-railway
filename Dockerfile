@@ -17,12 +17,16 @@ ENV OLLAMA_HOST=127.0.0.1:11434
 # Pull the model now (build time). Start Ollama in the background, wait
 # for it, pull the model, then stop Ollama. The model lands in
 # /root/.ollama/models inside the image.
+# NOTE: qwen2.5:1.5b (986 MB) does NOT fit in Railway's 1 GB service limit
+# (weights + Ollama + proxy > 1024 MB; llama-server gets OOM-killed), so we
+# use qwen2.5:0.5b (397 MB) which fits comfortably. If the memory limit is
+# ever raised to 2 GB, change 0.5b back to 1.5b here and in OLLAMA_MODEL.
 RUN ollama serve > /tmp/ollama-build.log 2>&1 & \
     for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do \
       curl -fsS http://127.0.0.1:11434/api/tags >/dev/null 2>&1 && break; \
       sleep 2; \
     done; \
-    ollama pull qwen2.5:1.5b; \
+    ollama pull qwen2.5:0.5b; \
     pkill ollama || true; \
     sleep 2; \
     ls -la /root/.ollama/models/blobs | head -5
